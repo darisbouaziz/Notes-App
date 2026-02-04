@@ -1,9 +1,25 @@
 import NoteForm from "./components/NoteForm";
-import { use, useState } from "react";
+import { useState, useEffect } from "react";
 import NoteList from "./components/NoteList";
 
 const App = () => {
-  const [notes, setNotes] = useState([]);
+  /* 
+  - localStorage.getItem(): Retrives the JSON of the item in the local storage or return null if the item dont exist in the local storage
+  - JSON.parse(): convert a JSON string to a js object
+  */
+  const [notes, setNotes] = useState(() => {
+    const notes = JSON.parse(localStorage.getItem("notes"));
+
+    return notes || [];
+  });
+
+  /* 
+  - JSON.stringify(): convert a js object to a JSON string
+  - localStorage.setItem(): When "notes" is updated the local storage add (if "notes" don't exist) or change (if "notes" already exist) his "notes" item with the new one 
+  */
+  useEffect(() => {
+    localStorage.setItem("notes", JSON.stringify(notes));
+  }, [notes]);
 
   const deleteNote = (id) => {
     const confirmDelete = window.confirm(
